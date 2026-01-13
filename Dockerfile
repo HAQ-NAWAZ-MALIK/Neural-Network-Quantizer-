@@ -28,8 +28,9 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV GRADIO_SERVER_NAME=0.0.0.0
-ENV GRADIO_SERVER_PORT=7860
+
+# Create non-root user first
+RUN useradd -m -u 1000 user
 
 WORKDIR /app
 
@@ -45,18 +46,19 @@ COPY backend/requirements.txt ./requirements.txt
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend code
-COPY backend/ ./backend/
+# Copy backend code with ownership
+COPY --chown=user backend/ ./backend/
 
-# Copy frontend build
-COPY --from=frontend-build /app/frontend/dist ./frontend/dist
+# Copy frontend build with ownership
+COPY --chown=user --from=frontend-build /app/frontend/dist ./frontend/dist
 
 # Copy HuggingFace Spaces entry point
-COPY app.py ./
+COPY --chown=user app.py ./
 
-# Create non-root user
-RUN useradd -m -u 1000 user
+# Switch to non-root user
 USER user
+ENV HOME=/home/user
+ENV PATH=/home/user/.local/bin:$PATH
 
 # Expose port
 EXPOSE 7860

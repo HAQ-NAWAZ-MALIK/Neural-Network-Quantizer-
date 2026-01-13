@@ -6,14 +6,17 @@ import Dashboard from './pages/Dashboard';
 import Quantizer from './pages/Quantizer';
 import Analysis from './pages/Analysis';
 import ModelLoader from './pages/ModelLoader';
-import { useSystemStore } from './store';
+import { useSystemStore, useUIStore } from './store';
 import './index.css';
 
 function App() {
   const fetchSystemInfo = useSystemStore((state) => state.fetchSystemInfo);
+  const theme = useUIStore((state) => state.theme);
 
   useEffect(() => {
-    // Fetch system info on app load
+    // Sync theme on mount
+    document.documentElement.setAttribute('data-theme', theme);
+    // Fetch system info
     fetchSystemInfo();
 
     const handleOffline = () => toast.error("Internet connection lost");

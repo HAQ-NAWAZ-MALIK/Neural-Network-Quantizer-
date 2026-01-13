@@ -10,7 +10,9 @@ import {
   Zap,
   Github,
   Menu,
-  X
+  X,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useSystemStore, useUIStore, useModelStore } from '../store';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,7 +21,7 @@ import { motion, AnimatePresence } from 'framer-motion';
  * Main application layout with sidebar navigation
  */
 export default function Layout() {
-  const { sidebarOpen, toggleSidebar } = useUIStore();
+  const { sidebarOpen, toggleSidebar, theme, toggleTheme } = useUIStore();
   const systemInfo = useSystemStore((state) => state.systemInfo);
   const checkLoadedModel = useModelStore((state) => state.checkLoadedModel);
   const location = useLocation();
@@ -105,6 +107,11 @@ export default function Layout() {
               </div>
             )}
           </div>
+
+          <button className="nav-item w-full" onClick={toggleTheme}>
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+          </button>
 
           <a
             href="https://github.com"

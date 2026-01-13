@@ -323,9 +323,14 @@ export const useQuantizationStore = create((set, get) => ({
 export const useUIStore = create((set) => ({
     sidebarOpen: true,
     activeTab: 'quantize',
-    theme: 'dark',
+    theme: localStorage.getItem('theme') || 'dark',
 
     toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
     setActiveTab: (tab) => set({ activeTab: tab }),
-    setTheme: (theme) => set({ theme })
+    toggleTheme: () => set((state) => {
+        const newTheme = state.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        return { theme: newTheme };
+    })
 }));

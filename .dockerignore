@@ -1,0 +1,15 @@
+node_modules
+dist
+build
+.git
+.gitignore
+venv
+env
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+.env
+site-packages
+.gemini
